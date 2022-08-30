@@ -1,37 +1,25 @@
 version: '3.8'
 services:
   postgres:
-    image: postgres:14.1-alpine
+    image: mybackend:latest
     restart: always
     volumes:
-      - db:/var/lib/postgresql/data
-      - ./sql:/docker-entrypoint-initdb.d
+      - .:/library_db
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-    ports:
-      - "5432:5432"
     networks:
       - spider_web
-
-  python:
-    build: .
-    restart: always
-    depends_on:
-      - postgres
-    networks:
-      - spider_web
-    volumes:
-      - ./src:/meuBackend
 
   web:
+    image: mybackend:latest
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:3000
     volumes:
-      - .:/application
+      - .:/library_db
     ports:
-      - "8000:8000"
+      - "3000:3000"
     environment:
       - POSTGRES_NAME=postgres
       - POSTGRES_USER=postgres
