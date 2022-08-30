@@ -15,15 +15,26 @@ services:
   web:
     image: mybackend:latest
     build: .
-    command: python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:3000
+    command: python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/library_db
     ports:
-      - "3000:3000"
+      - "8000:8000"
     environment:
       - POSTGRES_NAME=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    depends_on:
+      - postgres
+
+  node:
+    image: myfront:latest
+    build: .
+    command: npm start && node app.js
+    volumes:
+      - .:/library_db
+    ports:
+      - "3000:3000"
     depends_on:
       - postgres
 
