@@ -1,6 +1,7 @@
 version: '3.8'
 services:
   postgres:
+    container_name: app_postgres
     image: postgres:latest
     restart: always
     volumes:
@@ -13,6 +14,7 @@ services:
       - net_livraria
 
   meu_backend:
+    container_name: app_backend
     restart: always
     build: ./library_back
     command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
@@ -46,6 +48,7 @@ services:
       - net_livraria
 
   nginx:
+    container_name: app_nginx
     image: nginx:latest
     restart: always
     ports:
