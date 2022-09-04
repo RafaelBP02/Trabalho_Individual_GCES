@@ -1,0 +1,46 @@
+name: CD
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  back_e_front :
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check Out Repo 
+        uses: actions/checkout@v2
+
+      - name: Login no Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Setando o Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Fazendo Build e push do back
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: ./library_back
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/simplewhale:latest
+
+      - name: Fazendo Build e push do front
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: ./library_front
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/simplewhale:latest
+
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
+
+
