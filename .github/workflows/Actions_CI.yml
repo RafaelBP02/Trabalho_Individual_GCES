@@ -18,14 +18,25 @@ jobs:
       - name: Build the compose-file
         run: docker-compose up -d --build
 
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Usando lint 
+      run: docker-compose run --entrypoint "npm run lint src/" node
+
   test-frontend:
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
     
-    - name: inicialização do Container para realizar testes
-      run: docker-compose run --entrypoint "npm test --ci=true" node
+    - name: Rodando os testes do front no container
+      run: docker-compose run --entrypoint "npm test" node
+      env:
+        CI: true
 
   test-backend:
     runs-on: ubuntu-latest
@@ -33,5 +44,5 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
-    - name: inicialização do Container para realizar testes
+    - name: Rodando os testes do back no container
       run: docker-compose run --entrypoint "python manage.py test" meu_backend
