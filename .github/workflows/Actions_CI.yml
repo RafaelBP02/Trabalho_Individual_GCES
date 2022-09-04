@@ -40,4 +40,4 @@ jobs:
       run: docker-compose run -d meu_backend
       
     - name: Realização dos testes
-      run: docker exec meu_backend bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py test"
+      run: docker exec app_backend bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py test"
