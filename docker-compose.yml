@@ -43,7 +43,7 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - postgres
+      - meu_backend
     networks:
       - net_livraria
 

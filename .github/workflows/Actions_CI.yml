@@ -25,10 +25,7 @@ jobs:
     - uses: actions/checkout@v3
     
     - name: inicialização do Container para realizar testes
-      run: docker-compose run -d node
-      
-    - name: Realização dos testes
-      run: docker exec app_frontend bash -c "npm test"
+      run: docker-compose run --entrypoint "npm test" node
 
   test-backend:
     runs-on: ubuntu-latest
@@ -37,7 +34,4 @@ jobs:
     - uses: actions/checkout@v3
     
     - name: inicialização do Container para realizar testes
-      run: docker-compose run -d meu_backend
-      
-    - name: Realização dos testes
-      run: docker exec app_backend bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py test"
+      run: docker-compose run --entrypoint "python manage.py makemigrations && python manage.py migrate && python manage.py test" meu_backend
