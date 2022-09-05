@@ -2,7 +2,7 @@ FROM python:latest
 
 WORKDIR /library_db
 
-COPY requirements.txt .
+COPY ./requirements.txt .
 
 RUN pip install -r requirements.txt
 
