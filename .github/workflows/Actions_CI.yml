@@ -48,5 +48,8 @@ jobs:
     - name: Subindo todos os containers
       run: docker-compose up -d --build  
 
+    - name: Fazendo migrações
+      run: docker exec app_backend python manage.py makemigrations && docker exec app_backend python manage.py migrate    
+
     - name: Rodando os testes do back no container
       run: docker exec app_backend bash -c "python manage.py test"
