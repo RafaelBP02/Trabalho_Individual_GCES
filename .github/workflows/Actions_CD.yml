@@ -1,7 +1,10 @@
 name: CD
 
 on:
-  push:
+  workflow_run:
+    workflows: [ CI ]
+    types:
+      - completed
     branches: [ main ]
 
 jobs:
@@ -26,16 +29,14 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-          context: ./library_back
-          file: ./Dockerfile
+          build: ./library_back/
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/deploycdgces:latest
 
       - name: Fazendo Build e push do front
         uses: docker/build-push-action@v2
         with:
-          context: ./library_front
-          file: ./Dockerfile
+          build: ./library_front/
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/deploycdgces:latest
 
